@@ -1,6 +1,6 @@
 import jupyter_to_medium as jtm
 
-jtm.publish('merge_data_article/main.ipynb',
+jtm.publish('',
             integration_token="",
             pub_name=None,
             title=None,

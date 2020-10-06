@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('',
+jtm.publish('progress_bars/progress_bars.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title=None,

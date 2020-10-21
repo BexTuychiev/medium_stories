@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('',
+jtm.publish('qcut_cut/binning_data_with_qcut_cut.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title=None,

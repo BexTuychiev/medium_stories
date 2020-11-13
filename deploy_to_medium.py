@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('',
+jtm.publish('november_2020/string_matching_w_fuzzy_wuzzy/fuzzy_wuzzy.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title=None,

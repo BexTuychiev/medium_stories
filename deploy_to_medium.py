@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('october_2020/cleaning_categorical_data/cleaning_categorical_data.ipynb',
+jtm.publish('',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title=None,

@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('november_2020/visualizing_missingno/new_package_in_town.ipynb',
+jtm.publish('',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title=None,

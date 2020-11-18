@@ -14,7 +14,3 @@ jtm.publish('',
             save_markdown=False,
             table_conversion='chrome'
             )
-import recordlinkage
-
-compare = recordlinkage.Compare()
-compare.string()

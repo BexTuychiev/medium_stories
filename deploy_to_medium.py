@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('november_2020/dates_and_times/dates_in_python.ipynb',
+jtm.publish('',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title=None,

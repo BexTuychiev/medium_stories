@@ -1,4 +1,4 @@
 *.idea
 *.jpg
 *.png
-*/.ipynb_checkpointsm
+.ipynb_checkpoints

@@ -2,3 +2,4 @@
 *.jpg
 *.png
 .ipynb_checkpoints
+debug.log

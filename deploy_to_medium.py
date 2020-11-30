@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('november_2020/10_functions/functions.ipynb',
+jtm.publish('november_2020/11_context_managers/context_managers.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title=None,

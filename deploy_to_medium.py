@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('december_2020/1_decorators/python_decorators.ipynb',
+jtm.publish('november_2020/12_lakefs_data_versioning/data_versioning.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title=None,

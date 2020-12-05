@@ -2,5 +2,5 @@
 *.jpg
 *.png
 .ipynb_checkpoints
-debug.log
+./debug.log
 *.wma

@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('december_2020/3_log_scale/log_scale.ipynb',
+jtm.publish('2020/december/3_log_scale/log_scale.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title=None,

@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('',
+jtm.publish('2021/january/6_hypothesis_testing/hypothesis_testing.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title=None,

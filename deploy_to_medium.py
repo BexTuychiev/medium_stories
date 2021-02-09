@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('',
+jtm.publish('2021/february/2_ml_dictionary/ml_dict.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title=None,

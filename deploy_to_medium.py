@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('',
+jtm.publish('2021/february/8_kaggle_tips_vol_1/tips.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title=None,

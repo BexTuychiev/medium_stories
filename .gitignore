@@ -5,3 +5,5 @@
 ./debug.log
 *.wma
 *.log
+snippets
+.virtual_documents

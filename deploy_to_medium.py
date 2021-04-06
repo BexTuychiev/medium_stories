@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/march/3_plotly_pandas_backend/plotly_backed.ipynb',
+jtm.publish('',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title=None,

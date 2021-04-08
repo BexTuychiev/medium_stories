@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/april/2_top_sources/top_resources.ipynb',
+jtm.publish('',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title=None,

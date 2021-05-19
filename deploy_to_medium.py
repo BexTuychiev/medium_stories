@@ -1,10 +1,10 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/may/',
+jtm.publish('2021/may/6_feature_selection_study_guide/fs_study_guide.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title='',
+            title='4-part Practical Study Guide To Sklearn Feature Selection',
             tags=None,
             publish_status='draft',
             notify_followers=False,

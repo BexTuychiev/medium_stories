@@ -1,10 +1,10 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/may/',
+jtm.publish('2021/may/7_scaling_normalization_log_trans/numeric_preprocessing.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title='4-part Practical Study Guide To Sklearn Feature Selection',
+            title='The Real Difference Between Scaling, Normalization and Log Transformations with Sklearn',
             tags=None,
             publish_status='draft',
             notify_followers=False,

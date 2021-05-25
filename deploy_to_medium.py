@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/may/8_beyond_simpleimputer/beyond_simpleimputer.ipynb',
+jtm.publish('2021/may/',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title='',

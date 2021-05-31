@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/may/9_confusion_matrix/confusion_matrix.ipynb',
+jtm.publish('2021/may/',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title='How to Tune Models like a Puppet-master Based on Confusion Matrix',

@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/may/10_managing_data_access/data_access.ipynb',
+jtm.publish('2021/',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title='How to Manage Attribute and Data Access in Python Classes',

@@ -4,7 +4,7 @@ import os
 jtm.publish('2021/',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title='How to Manage Attribute and Data Access in Python Classes',
+            title='',
             tags=None,
             publish_status='draft',
             notify_followers=False,

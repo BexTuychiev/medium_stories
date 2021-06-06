@@ -4,7 +4,7 @@ import os
 jtm.publish('2021/june/1_multiclass_classification/multiclass.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title='Ultimate Guide to Multiclass Classification With Sklearn',
+            title='',
             tags=None,
             publish_status='draft',
             notify_followers=False,

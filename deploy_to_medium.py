@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/june/1_multiclass_classification/multiclass.ipynb',
+jtm.publish('2021/june',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title='',

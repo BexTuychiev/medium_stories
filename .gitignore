@@ -7,3 +7,4 @@
 *.log
 snippets
 .virtual_documents
+*.db

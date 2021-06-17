@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/june/',
+jtm.publish('2021/june/4_sklearn_mistakes/sklearn_mistakes.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title='',

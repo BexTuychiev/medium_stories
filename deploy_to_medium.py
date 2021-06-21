@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/june/',
+jtm.publish('2021/june/6_open_source_object_storage/open_source_object_storage.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title='',

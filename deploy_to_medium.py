@@ -1,10 +1,10 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/july/1_github_copilot/copilot.ipynb',
+jtm.publish('2021/july/',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title='OpenAI Launches GitHub Copilot: AI Focused On Code Generation. Should We Be Worried Now?',
+            title='',
             tags=None,
             publish_status='draft',
             notify_followers=False,

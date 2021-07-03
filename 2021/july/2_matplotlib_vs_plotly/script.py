@@ -87,11 +87,3 @@ def plot_scores(mpl=0, px=0):
 
     for s in ["top", "left", "right", "bottom"]:
         ax.spines[s].set_visible(False)
-
-
-import seaborn as sns
-
-df = sns.load_dataset('diamonds')
-
-plt.scatter(df['price'], df['carat'])
-plt.show()

@@ -11,10 +11,10 @@ def plot_scores(mpl=0, px=0):
         mpl_score = 0.5
         px_score = 0.5
     # Set a minimum score of 0.3 if any score is 0
-    elif (mpl == 0 and px != 0):
+    elif mpl == 0 and px != 0:
         mpl_score = 0.3
         px_score = 0.7
-    elif (px == 0 and mpl != 0):
+    elif px == 0 and mpl != 0:
         px_score = 0.3
         mpl_score = 0.7
     else:
@@ -87,3 +87,11 @@ def plot_scores(mpl=0, px=0):
 
     for s in ["top", "left", "right", "bottom"]:
         ax.spines[s].set_visible(False)
+
+
+import seaborn as sns
+
+df = sns.load_dataset('diamonds')
+
+plt.scatter(df['price'], df['carat'])
+plt.show()

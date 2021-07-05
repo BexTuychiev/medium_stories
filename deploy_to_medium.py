@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/july/',
+jtm.publish('2021/july/2_matplotlib_vs_plotly/matplotlib_vs_plotly.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title='',

@@ -1,10 +1,10 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/july/3_time_series_manipulation/time_series_2.ipynb',
+jtm.publish('2021/july/',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title='Every Function You Can (Should) Use in Pandas to Manipulate Time Series',
+            title='',
             tags=None,
             publish_status='draft',
             notify_followers=False,

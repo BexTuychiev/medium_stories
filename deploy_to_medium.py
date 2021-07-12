@@ -4,7 +4,7 @@ import os
 jtm.publish('2021/july/',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title='',
+            title=,
             tags=None,
             publish_status='draft',
             notify_followers=False,

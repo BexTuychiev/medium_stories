@@ -1,10 +1,10 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/july/6_stationarity_ts/stationarity.ipynb',
+jtm.publish('2021/july/',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title='How to Remove Non-Stationarity in Time Series Forecasting',
+            title='',
             tags=None,
             publish_status='draft',
             notify_followers=False,

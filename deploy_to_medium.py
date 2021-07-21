@@ -13,4 +13,4 @@ jtm.publish('2021/july/',
             chrome_path=None,
             save_markdown=False,
             table_conversion='chrome'
-            )
+            )gca

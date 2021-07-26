@@ -1,10 +1,10 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/july/',
+jtm.publish('2021/july/8_xgboost_faqs/faqs.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title='',
+            title='20 Burning XGBoost FAQs Answered to Use the Library Like a Pro',
             tags=None,
             publish_status='draft',
             notify_followers=False,

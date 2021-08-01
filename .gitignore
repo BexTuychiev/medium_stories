@@ -9,3 +9,5 @@ snippets
 .virtual_documents
 *.db
 *.gif
+train.csv
+test.csv

@@ -14,3 +14,4 @@ jtm.publish('2021/august/',
             save_markdown=False,
             table_conversion='chrome'
             )
+g

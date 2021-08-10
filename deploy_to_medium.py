@@ -1,10 +1,10 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/august/2_popular_kaggle_packages/kaggle_packages.ipynb',
+jtm.publish('2021/august/',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title='7 Coolest Python Packages Kagglers Are Using Without Telling You',
+            title='',
             tags=None,
             publish_status='draft',
             notify_followers=False,

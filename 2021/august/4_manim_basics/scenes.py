@@ -45,3 +45,18 @@ class ShowCoords2(Scene):
 
         # Add the dot with Create animation
         self.play(Create(dot))
+
+
+class AnimateAttribs(Scene):
+    def construct(self):
+        # Create a simple square
+        square = Square(side_length=2)
+
+        # Scale to twice the size
+        self.play(square.animate.scale(2))
+        # Rotate
+        self.play(square.animate.rotate(PI / 3))  # Rotate 60 degrees
+        # Change the fill color
+        self.play(square.animate.set_fill(RED))
+        # Change the opacity
+        self.play(square.animate.set_opacity(0.3), run_time=2)

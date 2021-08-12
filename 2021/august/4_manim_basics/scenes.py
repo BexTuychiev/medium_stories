@@ -1,18 +1,20 @@
 from manim import *
 
 
-class MobjectPlacement(Scene):
+class MyFirstAnimation(Scene):
     def construct(self):
-        circle = Circle()
-        square = Square()
-        triangle = Triangle()
+        # Create basic mobjects
+        star = Star(n=5, fill_color=RED, stroke_color=BLUE)
+        circle = Circle(fill_color=DARK_BLUE, fill_opacity=.8, stroke_color=BLUE)
 
-        # place the circle two units left from the origin
-        circle.move_to(LEFT * 2)
-        # place the square to the left of the circle
-        square.next_to(circle, LEFT)
-        # align the left border of the triangle to the left border of the circle
-        triangle.align_to(circle, LEFT)
-
-        self.add(circle, square, triangle)
-        self.wait(1)
+        # Animate Fade in of the star that takes 2 seconds
+        self.play(FadeIn(star, run_time=2))
+        # Wait for a second
+        self.wait()
+        # Animate Fade Out of the star
+        self.play(FadeOut(star))
+        self.wait(0.5)
+        # Do the same for the circle
+        self.play(FadeIn(circle, run_time=2))
+        self.wait()
+        self.play(FadeOut(circle))

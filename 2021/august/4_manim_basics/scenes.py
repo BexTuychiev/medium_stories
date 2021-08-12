@@ -11,10 +11,8 @@ class MyFirstAnimation(Scene):
         self.play(FadeIn(star, run_time=2))
         # Wait for a second
         self.wait()
-        # Animate Fade Out of the star
-        self.play(FadeOut(star))
+        # Transform star into a circle
+        self.play(Transform(star, circle))
         self.wait(0.5)
-        # Do the same for the circle
-        self.play(FadeIn(circle, run_time=2))
-        self.wait()
+        # Remove the circle by fading it out
         self.play(FadeOut(circle))

@@ -13,3 +13,4 @@ train.csv
 test.csv
 *.zip
 media
+*.mp4

@@ -1,10 +1,10 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/august/4_manim_basics/notebook.ipynb',
+jtm.publish('2021/august/',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title='Love 3Blue1Brown Animations? Learn How to Create One in Python Using Manim',
+            title='',
             tags=None,
             publish_status='draft',
             notify_followers=False,

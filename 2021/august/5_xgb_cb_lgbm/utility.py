@@ -172,7 +172,7 @@ class XGBTask:
 
     def cross_validate_tuned(self):
         study = optuna.create_study(sampler=TPESampler(seed=SEED), direction='minimize', study_name='xgb')
-        study.optimize(self.optuna_objective, n_trials=50, callbacks=[XGBTask.logging_callback])
+        study.optimize(self.optuna_objective, n_trials=50)
 
         return study.best_params
 
@@ -245,6 +245,42 @@ class LGBMTask(XGBTask):
 
             scores[idx] = [score, fold_time]
         return scores
+
+    def optuna_objective(self, trial):
+        params = {
+            # "device": trial.suggest_categorical("device", ['gpu']),
+            "reg_lambda": trial.suggest_float("lambda_l1", 1e-8, 10.0, log=True),
+            "reg_alpha": trial.suggest_float("lambda_l2", 1e-8, 10.0, log=True),
+            "learning_rate": trial.suggest_float("learning_rate", 0.01, 0.2),
+            "bagging_fraction": trial.suggest_float("bagging_fraction", .2, .95, step=.1),
+            "colsample_bytree": trial.suggest_float("colsample_bytree", .2, .95, step=.1),
+            "bagging_freq": trial.suggest_categorical("bagging_freq", [5]),
+            "max_depth": trial.suggest_int("max_depth", 3, 12),
+            "num_leaves": trial.suggest_int("num_leaves", 7, 3000, step=100),
+            'min_child_samples': trial.suggest_int('min_child_samples', 20, 80, step=5),
+            "min_split_gain": trial.suggest_float("min_split_gain", 0, 20),
+        }
+        pruning_callback = optuna.integration.LightGBMPruningCallback(trial, self._metric)
+        scores = np.empty(7)
+        X, y = self._preprocessed_data
+
+        for idx, (tr_idx, val_idx) in enumerate(self._cv.split(X, y)):
+            X_train, X_valid = X[tr_idx], X[val_idx]
+            y_train, y_valid = y[tr_idx], y[val_idx]
+            model = self._model(**params).fit(X_train, y_train,
+                                              eval_set=[(X_valid, y_valid)],
+                                              eval_metric=self._metric,
+                                              early_stopping_rounds=150,
+                                              verbose=False,
+                                              callbacks=[pruning_callback])
+            if self.task_type == 'regression':
+                preds = model.predict(X_valid)
+            else:
+                preds = model.predict_proba(X_valid)
+
+            score = self._scorer(y_valid, preds)
+            scores[idx] = score
+        return np.mean(scores)
 
 
 class CBTask(LGBMTask):

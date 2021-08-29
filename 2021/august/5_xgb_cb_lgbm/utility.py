@@ -18,10 +18,14 @@ import joblib
 import logging
 import time
 
-logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
+logging.basicConfig(format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S', level=logging.INFO)
 SEED = 1121218
 N_BOOST = 20000
 
+
+# class MasterTask:
+#     def __init__(self, data_path: str, data_name: str, target: str, task_type: str):
+#         self.models = []
 
 class Data:
     def __init__(self, data_path: str, data_name: str, target: str):
@@ -42,6 +46,7 @@ class XGBTask:
     def __init__(self, data_path: str, data_name: str, target: str, task_type: str):
         self._data = Data(data_path, data_name, target)
         self.task_type = task_type
+
         kf = KFold(n_splits=7, shuffle=True, random_state=SEED)
         strat_kf = StratifiedKFold(n_splits=7, shuffle=True, random_state=SEED)
         self._cv = kf if task_type == 'regression' else strat_kf
@@ -55,9 +60,9 @@ class XGBTask:
             ('num_pipe', num_pipeline, make_column_selector(dtype_include=np.number)),
             ('cat_pipe', cat_pipeline, make_column_selector(dtype_exclude=np.number))
         ])
-        X = full_pipe.fit_transform(self.data.X)
+        X = full_pipe.fit_transform(self._data.X)
 
-        return X, self.data.y
+        return X, self._data.y
 
     def _model(self, **kwargs):
         """
@@ -88,24 +93,23 @@ class XGBTask:
         else:
             return log_loss
 
-    def execute_simple(self):
+    def cross_validate(self, **kwargs):
         scores = dict()
         X, y = self._preprocessed_data
 
-        logging.info(
-            15 * "=" + f"Training {self._model().__class__.__name__} model on {self._data.name} data...\n" + 15 * "=")
-        for idx, (tr_idx, val_idx) in self._cv.split(X, y):
-            logging.info(10 * "=" + f"Started fold {idx}" + 10 * "=")
+        logging.info(12 * "=" + f"Training XGBoost model on {self._data.name.strip()} data" + 12 * "=" + "\n")
+        for idx, (tr_idx, val_idx) in enumerate(self._cv.split(X, y)):
+            logging.info(10 * "=" + f"Training fold {idx}" + 10 * "=")
             start = time.time()
 
             X_train, X_valid = X[tr_idx], X[val_idx]
             y_train, y_valid = y[tr_idx], y[val_idx]
 
-            model = self._model().fit(X_train, y_train,
-                                      eval_set=[(X_valid, y_valid)],
-                                      eval_metric=self._metric,
-                                      early_stopping_rounds=150,
-                                      verbose=False)
+            model = self._model(**kwargs).fit(X_train, y_train,
+                                              eval_set=[(X_valid, y_valid)],
+                                              eval_metric=self._metric,
+                                              early_stopping_rounds=150,
+                                              verbose=False)
             if self.task_type == 'regression':
                 preds = model.predict(X_valid)
             else:
@@ -126,14 +130,14 @@ class LGBMTask(XGBTask):
     def _preprocessed_data(self):
         num_pipeline = make_pipeline(SimpleImputer(strategy='constant', fill_value=-9999))
         cat_pipeline = make_pipeline(SimpleImputer(strategy='most_frequent'),
-                                     OrdinalEncoder())
+                                     OrdinalEncoder(dtype=np.int))
         full_pipe = ColumnTransformer(transformers=[
             ('num_pipe', num_pipeline, make_column_selector(dtype_include=np.number)),
             ('cat_pipe', cat_pipeline, make_column_selector(dtype_exclude=np.number))
         ])
-        X = full_pipe.fit_transform(self.data.X)
+        X = full_pipe.fit_transform(self._data.X)
 
-        return X, self.data.y
+        return X, self._data.y
 
     @property
     def _metric(self):
@@ -158,25 +162,24 @@ class LGBMTask(XGBTask):
 
         return model
 
-    def execute_simple(self):
+    def cross_validate(self, **kwargs):
         scores = dict()
         X, y = self._preprocessed_data
 
-        logging.info(
-            15 * "=" + f"Training {self._model().__class__.__name__} model on {self._data.name} data...\n" + 15 * "=")
-        for idx, (tr_idx, val_idx) in self._cv.split(X, y):
-            logging.info(10 * "=" + f"Started fold {idx}" + 10 * "=")
+        logging.info(12 * "=" + f"Training LightGBM model on {self._data.name.strip()} data" + 12 * "=" + "\n")
+        for idx, (tr_idx, val_idx) in enumerate(self._cv.split(X, y)):
+            logging.info(10 * "=" + f"Training fold {idx}" + 10 * "=")
             start = time.time()
 
             X_train, X_valid = X[tr_idx], X[val_idx]
             y_train, y_valid = y[tr_idx], y[val_idx]
 
-            model = self._model().fit(X_train, y_train,
-                                      eval_set=[(X_valid, y_valid)],
-                                      eval_metric=self._metric,
-                                      early_stopping_rounds=150,
-                                      categorical_feature=self.data.categoricals,
-                                      verbose=False)
+            model = self._model(**kwargs).fit(X_train, y_train,
+                                              eval_set=[(X_valid, y_valid)],
+                                              eval_metric=self._metric,
+                                              early_stopping_rounds=150,
+                                              categorical_feature=self._data.categoricals,
+                                              verbose=False)
             if self.task_type == 'regression':
                 preds = model.predict(X_valid)
             else:
@@ -192,6 +195,19 @@ class LGBMTask(XGBTask):
 class CBTask(LGBMTask):
     def __init__(self, data_path: str, data_name: str, target: str, task_type: str):
         super().__init__(data_path, data_name, target, task_type)
+
+    @property
+    def _preprocessed_data(self):
+        num_pipeline = make_pipeline(SimpleImputer(strategy='constant', fill_value=-9999))
+        cat_pipeline = make_pipeline(SimpleImputer(strategy='most_frequent'),
+                                     OrdinalEncoder(dtype=np.int))
+        full_pipe = ColumnTransformer(transformers=[
+            ('num_pipe', num_pipeline, self._data.X.columns[~self._data.X.columns.isin(self._data.categoricals)]),
+            ('cat_pipe', cat_pipeline, self._data.categoricals)
+        ])
+        X = full_pipe.fit_transform(self._data.X)
+
+        return X, self._data.y
 
     @property
     def _metric(self):
@@ -216,24 +232,24 @@ class CBTask(LGBMTask):
 
         return model
 
-    def execute_simple(self):
+    def cross_validate(self, **kwargs):
         scores = dict()
         X, y = self._preprocessed_data
 
-        logging.info(
-            15 * "=" + f"Training {self._model().__class__.__name__} model on {self._data.name} data...\n" + 15 * "=")
-        for idx, (tr_idx, val_idx) in self._cv.split(X, y):
-            logging.info(10 * "=" + f"Started fold {idx}" + 10 * "=")
+        logging.info(12 * "=" + f"Training CatBoost model on {self._data.name.strip()} data" + 12 * "=" + "\n")
+        for idx, (tr_idx, val_idx) in enumerate(self._cv.split(X, y)):
+            logging.info(10 * "=" + f"Training fold {idx}" + 10 * "=")
             start = time.time()
 
             X_train, X_valid = X[tr_idx], X[val_idx]
             y_train, y_valid = y[tr_idx], y[val_idx]
 
-            model = self._model(eval_metric=self._metric).fit(X_train, y_train,
-                                                              eval_set=[(X_valid, y_valid)],
-                                                              early_stopping_rounds=150,
-                                                              cat_features=self.data.categoricals,
-                                                              verbose=False)
+            model = self._model(**kwargs, loss_function=self._metric, eval_metric=self._metric, one_hot_max_size=15) \
+                .fit(pd.DataFrame(X_train), y_train,
+                     eval_set=[(pd.DataFrame(X_valid), y_valid)],
+                     early_stopping_rounds=150,
+                     cat_features=self._data.categoricals,
+                     verbose=False)
             if self.task_type == 'regression':
                 preds = model.predict(X_valid)
             else:

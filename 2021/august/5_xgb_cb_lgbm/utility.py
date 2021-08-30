@@ -121,7 +121,11 @@ class XGBTask:
             fold_time = time.time() - start
 
             scores[idx] = [score, fold_time]
-        return scores
+
+        # Convert scores dict to a DataFrame
+        score_df = pd.DataFrame(scores).T
+        score_df.columns = ['XGB_Score', 'XGB_duration']
+        return score_df
 
     def optuna_objective(self, trial):
         params = {
@@ -246,7 +250,10 @@ class LGBMTask(XGBTask):
             fold_time = time.time() - start
 
             scores[idx] = [score, fold_time]
-        return scores
+        # Convert scores dict to a DataFrame
+        score_df = pd.DataFrame(scores).T
+        score_df.columns = ['LGBM_Score', 'LGBM_duration']
+        return score_df
 
     def optuna_objective(self, trial):
         params = {
@@ -352,7 +359,10 @@ class CBTask(LGBMTask):
             fold_time = time.time() - start
 
             scores[idx] = [score, fold_time]
-        return scores
+        # Convert scores dict to a DataFrame
+        score_df = pd.DataFrame(scores).T
+        score_df.columns = ['CB_Score', 'CB_duration']
+        return score_df
 
     def optuna_objective(self, trial):
         params = {
@@ -389,3 +399,14 @@ class CBTask(LGBMTask):
             score = self._scorer(y_valid, preds)
             scores[idx] = score
         return np.mean(scores)
+
+
+class MasterTask:
+    def __init__(self, task_list: list):
+        self.tasks = [[XGBTask(*task), LGBMTask(*task), CBTask(*task)] for task in task_list]
+
+    def simple_execute_and_combine(self):
+        for task in self.tasks:
+
+            for sub_task in task:
+                sub_task.cross_validate()

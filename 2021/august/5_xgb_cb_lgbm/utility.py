@@ -172,7 +172,7 @@ class XGBTask:
 
     def cross_validate_tuned(self):
         study = optuna.create_study(sampler=TPESampler(seed=SEED), direction='minimize', study_name='xgb')
-        study.optimize(self.optuna_objective, n_trials=50)
+        study.optimize(self.optuna_objective, n_trials=50, callbacks=[XGBTask.logging_callback])
 
         return study.best_params
 
@@ -248,9 +248,9 @@ class LGBMTask(XGBTask):
 
     def optuna_objective(self, trial):
         params = {
-            # "device": trial.suggest_categorical("device", ['gpu']),
-            "reg_lambda": trial.suggest_float("lambda_l1", 1e-8, 10.0, log=True),
-            "reg_alpha": trial.suggest_float("lambda_l2", 1e-8, 10.0, log=True),
+            "device": trial.suggest_categorical("device", ['gpu']),
+            "reg_lambda": trial.suggest_float("lambda_l1", 1, 100.0),
+            "reg_alpha": trial.suggest_float("lambda_l2", 1, 100.0),
             "learning_rate": trial.suggest_float("learning_rate", 0.01, 0.2),
             "bagging_fraction": trial.suggest_float("bagging_fraction", .2, .95, step=.1),
             "colsample_bytree": trial.suggest_float("colsample_bytree", .2, .95, step=.1),
@@ -351,3 +351,39 @@ class CBTask(LGBMTask):
 
             scores[idx] = [score, fold_time]
         return scores
+
+    def optuna_objective(self, trial):
+        params = {
+            "task_type": trial.suggest_categorical("task_type", ['GPU']),
+            "learning_rate": trial.suggest_float("learning_rate", 0.01, 0.2),
+            "max_depth": trial.suggest_int("max_depth", 3, 12),
+            "reg_lambda": trial.suggest_int("reg_lambda", 1, 100),
+            "num_leaves": trial.suggest_int("num_leaves", 7, 3000, step=100),
+            "rsm": trial.suggest_float("rsm", 0.2, .95, step=.1),
+            "random_strength": trial.suggest_float("random_strength", 1e-9, 10, log=True),
+            "bagging_temperature": trial.suggest_float("bagging_temperature", 0, 1),
+            "grow_policy": trial.suggest_categorical("grow_policy", ['Lossguide'])
+        }
+        scores = np.empty(7)
+        X, y = self._preprocessed_data
+
+        for idx, (tr_idx, val_idx) in enumerate(self._cv.split(X, y)):
+
+            X_train, X_valid = X[tr_idx], X[val_idx]
+            y_train, y_valid = y[tr_idx], y[val_idx]
+
+            model = self._model(**params, loss_function=self._metric,
+                                eval_metric=self._metric, one_hot_max_size=15) \
+                .fit(pd.DataFrame(X_train), y_train,
+                     eval_set=[(pd.DataFrame(X_valid), y_valid)],
+                     early_stopping_rounds=150,
+                     cat_features=self._data.categoricals,
+                     verbose=False)
+            if self.task_type == 'regression':
+                preds = model.predict(X_valid)
+            else:
+                preds = model.predict_proba(X_valid)
+
+            score = self._scorer(y_valid, preds)
+            scores[idx] = score
+        return np.mean(scores)

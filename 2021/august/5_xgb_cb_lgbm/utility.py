@@ -171,10 +171,12 @@ class XGBTask:
             )
 
     def cross_validate_tuned(self):
+        start = time.time()
         study = optuna.create_study(sampler=TPESampler(seed=SEED), direction='minimize', study_name='xgb')
         study.optimize(self.optuna_objective, n_trials=50, callbacks=[XGBTask.logging_callback])
+        duration = time.time() - start
 
-        return study.best_params
+        return study.best_params, study.best_value, duration
 
 
 class LGBMTask(XGBTask):

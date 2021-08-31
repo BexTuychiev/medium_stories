@@ -25,10 +25,6 @@ SEED = 1121218
 N_BOOST = 20000
 
 
-# class MasterTask:
-#     def __init__(self, data_path: str, data_name: str, target: str, task_type: str):
-#         self.models = []
-
 class Data:
     def __init__(self, data_path: str, data_name: str, target: str):
         self.df = pd.read_csv(data_path)
@@ -359,6 +355,7 @@ class CBTask(LGBMTask):
             fold_time = time.time() - start
 
             scores[idx] = [score, fold_time]
+        print()
         # Convert scores dict to a DataFrame
         score_df = pd.DataFrame(scores).T
         score_df.columns = ['CB_Score', 'CB_duration']
@@ -406,7 +403,14 @@ class MasterTask:
         self.tasks = [[XGBTask(*task), LGBMTask(*task), CBTask(*task)] for task in task_list]
 
     def simple_execute_and_combine(self):
+        list_of_results = list()
         for task in self.tasks:
+            # noinspection PyProtectedMember
+            results_dict = {"Dataset Name": task[0]._data.name}
+            for sub_task, name in zip(task, ['XGBoost', 'LightGBM', 'CatBoost']):
+                result = sub_task.cross_validate()
+                results_dict[name + ' Score'] = result.iloc[:, 0].mean()
+                results_dict[name + ' Duration'] = result.iloc[:, 1].mean()
+            list_of_results.append(results_dict)
 
-            for sub_task in task:
-                sub_task.cross_validate()
+        return pd.DataFrame(list_of_results)

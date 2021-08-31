@@ -42,8 +42,9 @@ class Data:
 
 class XGBTask:
     def __init__(self, data_path: str, data_name: str, target: str, task_type: str):
-        self._data = Data(data_path, data_name, target)
+        self.data = Data(data_path, data_name, target)
         self.task_type = task_type
+        self.study = optuna.create_study(sampler=TPESampler(seed=SEED), direction='minimize', study_name='xgb')
 
         kf = KFold(n_splits=7, shuffle=True, random_state=SEED)
         strat_kf = StratifiedKFold(n_splits=7, shuffle=True, random_state=SEED)
@@ -58,9 +59,9 @@ class XGBTask:
             ('num_pipe', num_pipeline, make_column_selector(dtype_include=np.number)),
             ('cat_pipe', cat_pipeline, make_column_selector(dtype_exclude=np.number))
         ])
-        X = full_pipe.fit_transform(self._data.X)
+        X = full_pipe.fit_transform(self.data.X)
 
-        return X, self._data.y
+        return X, self.data.y
 
     def _model(self, **kwargs):
         """
@@ -95,7 +96,7 @@ class XGBTask:
         scores = dict()
         X, y = self._preprocessed_data
 
-        logging.info(12 * "=" + f"Training XGBoost model on {self._data.name.strip()} data" + 12 * "=" + "\n")
+        logging.info(12 * "=" + f"Training XGBoost model on {self.data.name.strip()} data" + 12 * "=" + "\n")
         for idx, (tr_idx, val_idx) in enumerate(self._cv.split(X, y)):
             logging.info(10 * "=" + f"Training fold {idx}" + 10 * "=")
             start = time.time()
@@ -172,11 +173,10 @@ class XGBTask:
 
     def cross_validate_tuned(self):
         start = time.time()
-        study = optuna.create_study(sampler=TPESampler(seed=SEED), direction='minimize', study_name='xgb')
-        study.optimize(self.optuna_objective, n_trials=50, callbacks=[XGBTask.logging_callback])
+        self.study.optimize(self.optuna_objective, n_trials=50, callbacks=[XGBTask.logging_callback])
         duration = time.time() - start
 
-        return study.best_params, study.best_value, duration
+        return self.study.best_params, self.study.best_value, duration
 
 
 class LGBMTask(XGBTask):
@@ -192,9 +192,9 @@ class LGBMTask(XGBTask):
             ('num_pipe', num_pipeline, make_column_selector(dtype_include=np.number)),
             ('cat_pipe', cat_pipeline, make_column_selector(dtype_exclude=np.number))
         ])
-        X = full_pipe.fit_transform(self._data.X)
+        X = full_pipe.fit_transform(self.data.X)
 
-        return X, self._data.y
+        return X, self.data.y
 
     @property
     def _metric(self):
@@ -223,7 +223,7 @@ class LGBMTask(XGBTask):
         scores = dict()
         X, y = self._preprocessed_data
 
-        logging.info(12 * "=" + f"Training LightGBM model on {self._data.name.strip()} data" + 12 * "=" + "\n")
+        logging.info(12 * "=" + f"Training LightGBM model on {self.data.name.strip()} data" + 12 * "=" + "\n")
         for idx, (tr_idx, val_idx) in enumerate(self._cv.split(X, y)):
             logging.info(10 * "=" + f"Training fold {idx}" + 10 * "=")
             start = time.time()
@@ -235,7 +235,7 @@ class LGBMTask(XGBTask):
                                               eval_set=[(X_valid, y_valid)],
                                               eval_metric=self._metric,
                                               early_stopping_rounds=150,
-                                              categorical_feature=self._data.categoricals,
+                                              categorical_feature=self.data.categoricals,
                                               verbose=False)
             if self.task_type == 'regression':
                 preds = model.predict(X_valid)
@@ -298,12 +298,12 @@ class CBTask(LGBMTask):
         cat_pipeline = make_pipeline(SimpleImputer(strategy='most_frequent'),
                                      OrdinalEncoder(dtype=np.int))
         full_pipe = ColumnTransformer(transformers=[
-            ('num_pipe', num_pipeline, self._data.X.columns[~self._data.X.columns.isin(self._data.categoricals)]),
-            ('cat_pipe', cat_pipeline, self._data.categoricals)
+            ('num_pipe', num_pipeline, self.data.X.columns[~self.data.X.columns.isin(self.data.categoricals)]),
+            ('cat_pipe', cat_pipeline, self.data.categoricals)
         ])
-        X = full_pipe.fit_transform(self._data.X)
+        X = full_pipe.fit_transform(self.data.X)
 
-        return X, self._data.y
+        return X, self.data.y
 
     @property
     def _metric(self):
@@ -332,7 +332,7 @@ class CBTask(LGBMTask):
         scores = dict()
         X, y = self._preprocessed_data
 
-        logging.info(12 * "=" + f"Training CatBoost model on {self._data.name.strip()} data" + 12 * "=" + "\n")
+        logging.info(12 * "=" + f"Training CatBoost model on {self.data.name.strip()} data" + 12 * "=" + "\n")
         for idx, (tr_idx, val_idx) in enumerate(self._cv.split(X, y)):
             logging.info(10 * "=" + f"Training fold {idx}" + 10 * "=")
             start = time.time()
@@ -344,7 +344,7 @@ class CBTask(LGBMTask):
                 .fit(pd.DataFrame(X_train), y_train,
                      eval_set=[(pd.DataFrame(X_valid), y_valid)],
                      early_stopping_rounds=150,
-                     cat_features=self._data.categoricals,
+                     cat_features=self.data.categoricals,
                      verbose=False)
             if self.task_type == 'regression':
                 preds = model.predict(X_valid)
@@ -368,7 +368,6 @@ class CBTask(LGBMTask):
             "max_depth": trial.suggest_int("max_depth", 3, 12),
             "reg_lambda": trial.suggest_int("reg_lambda", 1, 100),
             "num_leaves": trial.suggest_int("num_leaves", 7, 3000, step=100),
-            "rsm": trial.suggest_float("rsm", 0.2, .95, step=.1),
             "random_strength": trial.suggest_float("random_strength", 1e-9, 10, log=True),
             "bagging_temperature": trial.suggest_float("bagging_temperature", 0, 1),
             "grow_policy": trial.suggest_categorical("grow_policy", ['Lossguide'])
@@ -386,7 +385,7 @@ class CBTask(LGBMTask):
                 .fit(pd.DataFrame(X_train), y_train,
                      eval_set=[(pd.DataFrame(X_valid), y_valid)],
                      early_stopping_rounds=150,
-                     cat_features=self._data.categoricals,
+                     cat_features=self.data.categoricals,
                      verbose=False)
             if self.task_type == 'regression':
                 preds = model.predict(X_valid)
@@ -397,20 +396,39 @@ class CBTask(LGBMTask):
             scores[idx] = score
         return np.mean(scores)
 
+    def cross_validate_tuned(self):
+        start = time.time()
+        self.study.optimize(self.optuna_objective, n_trials=15, callbacks=[XGBTask.logging_callback])
+        duration = time.time() - start
+
+        return self.study.best_params, self.study.best_value, duration
+
 
 class MasterTask:
     def __init__(self, task_list: list):
         self.tasks = [[XGBTask(*task), LGBMTask(*task), CBTask(*task)] for task in task_list]
 
-    def simple_execute_and_combine(self):
+    def execute_simple_and_combine(self):
         list_of_results = list()
         for task in self.tasks:
-            # noinspection PyProtectedMember
-            results_dict = {"Dataset Name": task[0]._data.name}
+            results_dict = {"Dataset Name": task[0].data.name}
             for sub_task, name in zip(task, ['XGBoost', 'LightGBM', 'CatBoost']):
                 result = sub_task.cross_validate()
                 results_dict[name + ' Score'] = result.iloc[:, 0].mean()
-                results_dict[name + ' Duration'] = result.iloc[:, 1].mean()
+                results_dict[name + ' Runtime'] = result.iloc[:, 1].mean()
+            list_of_results.append(results_dict)
+
+        return pd.DataFrame(list_of_results)
+
+    def execute_tuned_and_combine(self):
+        list_of_results = list()
+        for task in self.tasks:
+            results_dict = {"Dataset Name": task[0].data.name}
+            for sub_task, name in zip(task, ['XGBoost', 'LightGBM', 'CatBoost']):
+                best_params, _, runtime = sub_task.cross_validate_tuned()
+                best_score_df = sub_task.cross_validate(**best_params)
+                results_dict[name + ' Best Score'] = best_score_df.iloc[:, 0].mean()
+                results_dict[name + 'HP Tuning Runtime'] = runtime
             list_of_results.append(results_dict)
 
         return pd.DataFrame(list_of_results)

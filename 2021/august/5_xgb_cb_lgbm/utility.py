@@ -21,7 +21,7 @@ import time
 
 logging.basicConfig(format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S', level=logging.INFO)
 optuna.logging.set_verbosity(optuna.logging.WARNING)
-SEED = 1121218
+SEED = 100000
 N_BOOST = 20000
 
 
@@ -104,11 +104,11 @@ class XGBTask:
             X_train, X_valid = X[tr_idx], X[val_idx]
             y_train, y_valid = y[tr_idx], y[val_idx]
 
-            model = self._model(**kwargs).fit(X_train, y_train,
-                                              eval_set=[(X_valid, y_valid)],
-                                              eval_metric=self._metric,
-                                              early_stopping_rounds=150,
-                                              verbose=False)
+            model = self._model(**kwargs, tree_method='gpu_hist').fit(X_train, y_train,
+                                                                      eval_set=[(X_valid, y_valid)],
+                                                                      eval_metric=self._metric,
+                                                                      early_stopping_rounds=150,
+                                                                      verbose=False)
             if self.task_type == 'regression':
                 preds = model.predict(X_valid)
             else:
@@ -173,7 +173,7 @@ class XGBTask:
 
     def cross_validate_tuned(self):
         start = time.time()
-        self.study.optimize(self.optuna_objective, n_trials=50, callbacks=[XGBTask.logging_callback])
+        self.study.optimize(self.optuna_objective, n_trials=20, callbacks=[XGBTask.logging_callback])
         duration = time.time() - start
 
         return self.study.best_params, self.study.best_value, duration
@@ -231,12 +231,12 @@ class LGBMTask(XGBTask):
             X_train, X_valid = X[tr_idx], X[val_idx]
             y_train, y_valid = y[tr_idx], y[val_idx]
 
-            model = self._model(**kwargs).fit(X_train, y_train,
-                                              eval_set=[(X_valid, y_valid)],
-                                              eval_metric=self._metric,
-                                              early_stopping_rounds=150,
-                                              categorical_feature=self.data.categoricals,
-                                              verbose=False)
+            model = self._model(**kwargs, device_type='gpu').fit(X_train, y_train,
+                                                                 eval_set=[(X_valid, y_valid)],
+                                                                 eval_metric=self._metric,
+                                                                 early_stopping_rounds=150,
+                                                                 categorical_feature=self.data.categoricals,
+                                                                 verbose=False)
             if self.task_type == 'regression':
                 preds = model.predict(X_valid)
             else:
@@ -340,7 +340,10 @@ class CBTask(LGBMTask):
             X_train, X_valid = X[tr_idx], X[val_idx]
             y_train, y_valid = y[tr_idx], y[val_idx]
 
-            model = self._model(**kwargs, loss_function=self._metric, eval_metric=self._metric, one_hot_max_size=15) \
+            model = self._model(**kwargs, loss_function=self._metric,
+                                eval_metric=self._metric,
+                                one_hot_max_size=15,
+                                task_type='GPU') \
                 .fit(pd.DataFrame(X_train), y_train,
                      eval_set=[(pd.DataFrame(X_valid), y_valid)],
                      early_stopping_rounds=150,
@@ -425,9 +428,8 @@ class MasterTask:
         for task in self.tasks:
             results_dict = {"Dataset Name": task[0].data.name}
             for sub_task, name in zip(task, ['XGBoost', 'LightGBM', 'CatBoost']):
-                best_params, _, runtime = sub_task.cross_validate_tuned()
-                best_score_df = sub_task.cross_validate(**best_params)
-                results_dict[name + ' Best Score'] = best_score_df.iloc[:, 0].mean()
+                _, best_score, runtime = sub_task.cross_validate_tuned()
+                results_dict[name + ' Best Score'] = best_score
                 results_dict[name + 'HP Tuning Runtime'] = runtime
             list_of_results.append(results_dict)
 

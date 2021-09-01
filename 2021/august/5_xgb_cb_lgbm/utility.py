@@ -46,8 +46,8 @@ class XGBTask:
         self.task_type = task_type
         self.study = optuna.create_study(sampler=TPESampler(seed=SEED), direction='minimize', study_name='xgb')
 
-        kf = KFold(n_splits=7, shuffle=True, random_state=SEED)
-        strat_kf = StratifiedKFold(n_splits=7, shuffle=True, random_state=SEED)
+        kf = KFold(n_splits=5, shuffle=True, random_state=SEED)
+        strat_kf = StratifiedKFold(n_splits=5, shuffle=True, random_state=SEED)
         self._cv = kf if task_type == 'regression' else strat_kf
 
     @property
@@ -253,17 +253,17 @@ class LGBMTask(XGBTask):
 
     def optuna_objective(self, trial):
         params = {
-            "device": trial.suggest_categorical("device", ['gpu']),
-            "reg_lambda": trial.suggest_float("lambda_l1", 1, 100.0),
-            "reg_alpha": trial.suggest_float("lambda_l2", 1, 100.0),
+            "device_type": trial.suggest_categorical("device_type", ['gpu']),
+            "lambda_l1": trial.suggest_float("lambda_l1", 1, 100.0),
+            "lambda_l2": trial.suggest_float("lambda_l2", 1, 100.0),
             "learning_rate": trial.suggest_float("learning_rate", 0.01, 0.2),
             "bagging_fraction": trial.suggest_float("bagging_fraction", .2, .95, step=.1),
-            "colsample_bytree": trial.suggest_float("colsample_bytree", .2, .95, step=.1),
+            "feature_fraction": trial.suggest_float("feature_fraction", .2, .95, step=.1),
             "bagging_freq": trial.suggest_categorical("bagging_freq", [5]),
             "max_depth": trial.suggest_int("max_depth", 3, 12),
             "num_leaves": trial.suggest_int("num_leaves", 7, 3000, step=100),
-            'min_child_samples': trial.suggest_int('min_child_samples', 20, 80, step=5),
-            "min_split_gain": trial.suggest_float("min_split_gain", 0, 20),
+            'min_data_in_leaf': trial.suggest_int('min_data_in_leaf', 20, 80, step=5),
+            "min_gain_to_split": trial.suggest_float("min_gain_to_split", 0, 20),
         }
         pruning_callback = optuna.integration.LightGBMPruningCallback(trial, self._metric)
         scores = np.empty(7)

@@ -1,10 +1,10 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/september/5_sklearn_transformers/notebook.ipynb',
+jtm.publish('2021/september/',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title="How to Write Powerful Code Others Envy With Custom Sklearn Transformers",
+            title="",
             tags=None,
             publish_status='draft',
             notify_followers=False,

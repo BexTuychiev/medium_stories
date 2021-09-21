@@ -1,10 +1,10 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/september/6_faster_pandas/notebook.ipynb',
+jtm.publish('2021/september/',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title="Let's Spill the Darkest Secrets of Pandas For Working With Massive Datasets (~10M rows)",
+            title="",
             tags=None,
             publish_status='draft',
             notify_followers=False,

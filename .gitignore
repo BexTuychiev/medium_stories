@@ -14,3 +14,4 @@ test.csv
 *.zip
 media
 *.mp4
+catboost_info

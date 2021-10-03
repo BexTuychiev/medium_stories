@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/september/8_umap_outlier_detection/notebook.ipynb',
+jtm.publish('2021/september/',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title="",

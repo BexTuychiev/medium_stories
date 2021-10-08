@@ -1,10 +1,10 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/october/',
+jtm.publish('2021/october/2_sklearn_features_2/notebook.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title="",
+            title="10 Underrated Sklearn Features You Can Use For Your Advantage Right Now",
             tags=None,
             publish_status='draft',
             notify_followers=False,

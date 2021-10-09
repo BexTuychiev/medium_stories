@@ -13,3 +13,6 @@ seaborn==0.11.2
 streamlit==0.88.0
 xgboost==1.4.2
 datatable==1.0.0
+umap-learn
+umap-learn[plot]
+shap

@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/october/5_matplotlib_functions_didnt_see/notebook.ipynb',
+jtm.publish('2021/october/5_matplotlib_functions_didnt_see/notebook.ipynb/',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title="",

@@ -1,10 +1,10 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/october/',
+jtm.publish('2021/october/7_tf_gpu/notebook.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title="",
+            title="How to Install TensorFlow GPU on Windows",
             tags=None,
             publish_status='draft',
             notify_followers=False,

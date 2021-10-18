@@ -1,10 +1,10 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/october/',
+jtm.publish('2021/october/4_numpy_functions_didnt_see/notebook.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title="How to Install TensorFlow GPU on Windows",
+            title="20 NumPy Functions You Never Knew Existed | P (Guarantee = 0.85)",
             tags=None,
             publish_status='draft',
             notify_followers=False,

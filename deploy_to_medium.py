@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/october/',
+jtm.publish('2021/october/10_matplotlib_logrocket/notebook.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title="",

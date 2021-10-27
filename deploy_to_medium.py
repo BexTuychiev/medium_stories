@@ -1,10 +1,10 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/october/3_pandas_mistakes/notebook.ipynb',
+jtm.publish('2021/october/',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title="6 Pandas Mistakes That Silently Tell You Are a Rookie",
+            title="",
             tags=None,
             publish_status='draft',
             notify_followers=False,

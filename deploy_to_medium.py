@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/october/',
+jtm.publish('2021/october/11_n_cv_techniques/notebook.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title="",

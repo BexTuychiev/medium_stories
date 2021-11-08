@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/november/',
+jtm.publish('2021/november/2_excalidraw/notebook.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title="",

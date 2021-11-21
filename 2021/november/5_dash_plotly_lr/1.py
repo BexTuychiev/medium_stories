@@ -4,24 +4,18 @@ import dash_html_components as html
 import plotly.express as px
 import pandas as pd
 
-app = dash.Dash(__name__)
+app = dash.Dash(name="app")
 
+# Load dataset using Plotly
 tips = px.data.tips()
 
-fig = px.scatter(tips, x="total_bill", y="tip")
+fig = px.scatter(tips, x="total_bill", y="tip")  # Create a scatterplot
 
-app.layout = html.Div(children=[
-    html.H1(children='Hello Dash'),  # Create a title with H1 tag
+title = html.H1("Hello Dash!")
+text_div = html.Div("Dash: A web application framework for your data.")
+graph_to_display = dcc.Graph(id="scatter", figure=fig)
 
-    html.Div(children='''
-        Dash: A web application framework for your data.
-    '''),  # Display some text
-
-    dcc.Graph(
-        id='example-graph',
-        figure=fig
-    )  # Display the Plotly figure
-])
+app.layout = html.Div(children=[title, text_div, graph_to_display])
 
 if __name__ == '__main__':
     app.run_server(debug=True)

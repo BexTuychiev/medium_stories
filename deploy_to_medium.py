@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/november/5_dash_plotly_lr/notebook.ipynb',
+jtm.publish('2021/',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title="",

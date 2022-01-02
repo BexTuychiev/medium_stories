@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2021/december/4_python_libraries/notebook.ipynb',
+jtm.publish('2021/december/4_python_builtins/notebook.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title="",

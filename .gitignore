@@ -1,6 +1,4 @@
 *.idea
-*.jpg
-*.png
 .ipynb_checkpoints
 ./debug.log
 *.wma

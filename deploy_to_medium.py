@@ -1,10 +1,10 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2022/2_february/3_image_processing/notebook.ipynb',
+jtm.publish('2022/2_february/',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title="Massive Post on Image Processing And Preparation For Deep Learning in Python",
+            title="",
             tags=None,
             publish_status='draft',
             notify_followers=False,

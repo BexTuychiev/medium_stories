@@ -15,3 +15,5 @@ media
 catboost_info
 train_oct.csv
 *.parquet
+raw
+prepared

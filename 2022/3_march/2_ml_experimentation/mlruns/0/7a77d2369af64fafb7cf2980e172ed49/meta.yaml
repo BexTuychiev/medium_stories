@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/User/Desktop/medium_stories/2022/3_march/2_ml_experimentation/mlruns/0/7a77d2369af64fafb7cf2980e172ed49/artifacts
+end_time: 1647839387582
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+name: ''
+run_id: 7a77d2369af64fafb7cf2980e172ed49
+run_uuid: 7a77d2369af64fafb7cf2980e172ed49
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1647839140913
+status: 3
+tags: []
+user_id: User

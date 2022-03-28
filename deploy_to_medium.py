@@ -1,10 +1,10 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2022/2_february/2_dvc_for_data_scientists/notebook.ipynb',
+jtm.publish('2022/3_march/2_ml_experimentation/notebook.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title="Open-source ML Project: Improve Pet Adoption With Machine Learning And DagsHub, #1",
+            title="Complete Guide to Tracking Your Machine Learning Experiments With MLFlow and DagsHub",
             tags=None,
             publish_status='draft',
             notify_followers=False,

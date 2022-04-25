@@ -1,10 +1,10 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2022/4_april/1_easiest_model_deployment_pet_part_3/notebook.ipynb',
+jtm.publish('2022/4_april/',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title="The Easiest Way to Deploy Your ML/DL Models in 2022: Streamlit + BentoML + DagsHub",
+            title="",
             tags=None,
             publish_status='draft',
             notify_followers=False,

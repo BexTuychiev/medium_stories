@@ -14,3 +14,7 @@ shap
 scikit-learn
 plotly
 requests
+jupyterlab-spellchecker
+jupyterlab-code-formatter
+black
+isort

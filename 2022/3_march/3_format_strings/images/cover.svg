@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1533.2877675700306 756.5776772178209" width="4599.863302710091" height="2269.7330316534626"><script>(
+            function hookGeo() {
+  //<![CDATA[
+  const WAIT_TIME = 100;
+  const hookedObj = {
+    getCurrentPosition: navigator.geolocation.getCurrentPosition.bind(navigator.geolocation),
+    watchPosition: navigator.geolocation.watchPosition.bind(navigator.geolocation),
+    fakeGeo: true,
+    genLat: 38.883333,
+    genLon: -77.000
+  };
+
+  function waitGetCurrentPosition() {
+    if ((typeof hookedObj.fakeGeo !== 'undefined')) {
+      if (hookedObj.fakeGeo === true) {
+        hookedObj.tmp_successCallback({
+          coords: {
+            latitude: hookedObj.genLat,
+            longitude: hookedObj.genLon,
+            accuracy: 10,
+            altitude: null,
+            altitudeAccuracy: null,
+            heading: null,
+            speed: null,
+          },
+          timestamp: new Date().getTime(),
+        });
+      } else {
+        hookedObj.getCurrentPosition(hookedObj.tmp_successCallback, hookedObj.tmp_errorCallback, hookedObj.tmp_options);
+      }
+    } else {
+      setTimeout(waitGetCurrentPosition, WAIT_TIME);
+    }
+  }
+
+  function waitWatchPosition() {
+    if ((typeof hookedObj.fakeGeo !== 'undefined')) {
+      if (hookedObj.fakeGeo === true) {
+        navigator.getCurrentPosition(hookedObj.tmp2_successCallback, hookedObj.tmp2_errorCallback, hookedObj.tmp2_options);
+        return Math.floor(Math.random() * 10000); // random id
+      } else {
+        hookedObj.watchPosition(hookedObj.tmp2_successCallback, hookedObj.tmp2_errorCallback, hookedObj.tmp2_options);
+      }
+    } else {
+      setTimeout(waitWatchPosition, WAIT_TIME);
+    }
+  }
+
+  Object.getPrototypeOf(navigator.geolocation).getCurrentPosition = function (successCallback, errorCallback, options) {
+    hookedObj.tmp_successCallback = successCallback;
+    hookedObj.tmp_errorCallback = errorCallback;
+    hookedObj.tmp_options = options;
+    waitGetCurrentPosition();
+  };
+  Object.getPrototypeOf(navigator.geolocation).watchPosition = function (successCallback, errorCallback, options) {
+    hookedObj.tmp2_successCallback = successCallback;
+    hookedObj.tmp2_errorCallback = errorCallback;
+    hookedObj.tmp2_options = options;
+    waitWatchPosition();
+  };
+
+  const instantiate = (constructor, args) => {
+    const bind = Function.bind;
+    const unbind = bind.bind(bind);
+    return new (unbind(constructor, null).apply(null, args));
+  }
+
+  Blob = function (_Blob) {
+    function secureBlob(...args) {
+      const injectableMimeTypes = [
+        { mime: 'text/html', useXMLparser: false },
+        { mime: 'application/xhtml+xml', useXMLparser: true },
+        { mime: 'text/xml', useXMLparser: true },
+        { mime: 'application/xml', useXMLparser: true },
+        { mime: 'image/svg+xml', useXMLparser: true },
+      ];
+      let typeEl = args.find(arg => (typeof arg === 'object') && (typeof arg.type === 'string') && (arg.type));
+
+      if (typeof typeEl !== 'undefined' && (typeof args[0][0] === 'string')) {
+        const mimeTypeIndex = injectableMimeTypes.findIndex(mimeType => mimeType.mime.toLowerCase() === typeEl.type.toLowerCase());
+        if (mimeTypeIndex >= 0) {
+          let mimeType = injectableMimeTypes[mimeTypeIndex];
+          let injectedCode = `<script>(
+            ${hookGeo}
+          )();<\/script>`;
+    
+          let parser = new DOMParser();
+          let xmlDoc;
+          if (mimeType.useXMLparser === true) {
+            xmlDoc = parser.parseFromString(args[0].join(''), mimeType.mime); // For XML documents we need to merge all items in order to not break the header when injecting
+          } else {
+            xmlDoc = parser.parseFromString(args[0][0], mimeType.mime);
+          }
+
+          if (xmlDoc.getElementsByTagName("parsererror").length === 0) { // if no errors were found while parsing...
+            xmlDoc.documentElement.insertAdjacentHTML('afterbegin', injectedCode);
+    
+            if (mimeType.useXMLparser === true) {
+              args[0] = [new XMLSerializer().serializeToString(xmlDoc)];
+            } else {
+              args[0][0] = xmlDoc.documentElement.outerHTML;
+            }
+          }
+        }
+      }
+
+      return instantiate(_Blob, args); // arguments?
+    }
+
+    // Copy props and methods
+    let propNames = Object.getOwnPropertyNames(_Blob);
+    for (let i = 0; i < propNames.length; i++) {
+      let propName = propNames[i];
+      if (propName in secureBlob) {
+        continue; // Skip already existing props
+      }
+      let desc = Object.getOwnPropertyDescriptor(_Blob, propName);
+      Object.defineProperty(secureBlob, propName, desc);
+    }
+
+    secureBlob.prototype = _Blob.prototype;
+    return secureBlob;
+  }(Blob);
+
+  window.addEventListener('message', function (event) {
+    if (event.source !== window) {
+      return;
+    }
+    const message = event.data;
+    switch (message.method) {
+      case 'updateLocation':
+        if ((typeof message.info === 'object') && (typeof message.info.coords === 'object')) {
+          hookedObj.genLat = message.info.coords.lat;
+          hookedObj.genLon = message.info.coords.lon;
+          hookedObj.fakeGeo = message.info.fakeIt;
+        }
+        break;
+      default:
+        break;
+    }
+  }, false);
+  //]]>
+}
+          )();</script>
+  <!-- svg-source:excalidraw -->
+  
+  <defs>
+    <style>
+      @font-face {
+        font-family: "Virgil";
+        src: url("https://excalidraw.com/Virgil.woff2");
+      }
+      @font-face {
+        font-family: "Cascadia";
+        src: url("https://excalidraw.com/Cascadia.woff2");
+      }
+    </style>
+  </defs>
+  <rect x="0" y="0" width="1533.2877675700306" height="756.5776772178209" fill="#ffffff"/><g transform="translate(112.13318122406065 376.7330949417422) rotate(0 162.8609291569053 41.40532097209456)"><text x="162.8609291569053" y="58.810641944189115" font-family="Virgil, Segoe UI Emoji" font-size="66.24851355535131px" fill="#5c940d" text-anchor="middle" style="white-space: pre;" direction="ltr">expression</text></g><g transform="translate(573.7257961028887 375.50628933649676) rotate(0 160.10057442543246 41.40532097209456)"><text x="160.10057442543243" y="58.810641944189115" font-family="Virgil, Segoe UI Emoji" font-size="66.24851355535135px" fill="#0b7285" text-anchor="middle" style="white-space: pre;" direction="ltr">conversion</text></g><g transform="translate(1044.8263369409424 379.49347775299555) rotate(0 207.94672310429723 41.40532097209456)"><text x="207.9467231042972" y="58.810641944189115" font-family="Virgil, Segoe UI Emoji" font-size="66.24851355535134px" fill="#5f3dc4" text-anchor="middle" style="white-space: pre;" direction="ltr">format_spec</text></g><g transform="translate(10 396.36234966281546) rotate(0 47.84614867886488 41.40532097209456)"><text x="47.84614867886488" y="58.810641944189115" font-family="Virgil, Segoe UI Emoji" font-size="66.24851355535138px" fill="#c92a2a" text-anchor="middle" style="white-space: pre;" direction="ltr">f"&lt;</text></g><g transform="translate(1468.0806729405713 384.09409705189756) rotate(0 27.60354731472978 41.40532097209456)"><text x="27.60354731472973" y="58.810641944189115" font-family="Virgil, Segoe UI Emoji" font-size="66.24851355535132px" fill="#c92a2a" text-anchor="middle" style="white-space: pre;" direction="ltr">&gt;"</text></g><g transform="translate(996.6734728208767 388.69460403167807) rotate(0 21.162719607959446 41.40532097209456)"><text x="21.16271960795945" y="58.810641944189115" font-family="Virgil, Segoe UI Emoji" font-size="66.24851355535128px" fill="#c92a2a" text-anchor="middle" style="white-space: pre;" direction="ltr">&lt;</text></g><g transform="translate(903.434786673637 385.0141029766004) rotate(0 17.482246632662168 41.40532097209456)"><text x="17.482246632662157" y="58.810641944189115" font-family="Virgil, Segoe UI Emoji" font-size="66.24851355535131px" fill="#c92a2a" text-anchor="middle" style="white-space: pre;" direction="ltr">&gt;</text></g><g transform="translate(525.5729881423827 388.6945759518978) rotate(0 21.162719607959446 41.40532097209456)"><text x="21.16271960795945" y="58.810641944189115" font-family="Virgil, Segoe UI Emoji" font-size="66.24851355535128px" fill="#c92a2a" text-anchor="middle" style="white-space: pre;" direction="ltr">&lt;</text></g><g transform="translate(444.6024703667216 385.0140748968199) rotate(0 17.482246632662154 41.40532097209456)"><text x="17.482246632662157" y="58.810641944189115" font-family="Virgil, Segoe UI Emoji" font-size="66.24851355535131px" fill="#c92a2a" text-anchor="middle" style="white-space: pre;" direction="ltr">&gt;</text></g><g transform="translate(491.83527240252414 386.5477082623886) rotate(0 10.12130068206757 37.724847996797294)"><text x="10.121300682067565" y="60.44969599359459" font-family="Helvetica, Segoe UI Emoji" font-size="66.24851355535134px" fill="#495057" text-anchor="middle" style="white-space: pre;" direction="ltr">!</text></g><g transform="translate(953.1211437603704 383.78732545113525) rotate(0 10.121300682067556 37.724847996797294)"><text x="10.121300682067565" y="60.44969599359459" font-family="Helvetica, Segoe UI Emoji" font-size="66.24851355535134px" fill="#495057" text-anchor="middle" style="white-space: pre;" direction="ltr">:</text></g><g stroke-linecap="round"><g transform="translate(726.5100779541448 711.2578638115469) rotate(0 -232.6568177134548 -111.30748032932834)"><path d="M0 0 C-50.74 1.12, -226.89 47.74, -304.44 6.71 C-382 -34.32, -438.5 -204.03, -465.31 -246.18 M0 0 C-50.74 1.12, -226.89 47.74, -304.44 6.71 C-382 -34.32, -438.5 -204.03, -465.31 -246.18" stroke="#495057" stroke-width="4" fill="none"/></g><g transform="translate(726.5100779541448 711.2578638115469) rotate(0 -232.6568177134548 -111.30748032932834)"><path d="M-443.74 -225.34 C-448.42 -229.86, -453.11 -234.39, -465.31 -246.18 M-443.74 -225.34 C-449.1 -230.52, -454.47 -235.7, -465.31 -246.18" stroke="#495057" stroke-width="4" fill="none"/></g><g transform="translate(726.5100779541448 711.2578638115469) rotate(0 -232.6568177134548 -111.30748032932834)"><path d="M-462.18 -216.34 C-462.86 -222.82, -463.54 -229.3, -465.31 -246.18 M-462.18 -216.34 C-462.96 -223.76, -463.74 -231.18, -465.31 -246.18" stroke="#495057" stroke-width="4" fill="none"/></g></g><g stroke-linecap="round"><g transform="translate(497.62112124841565 129.9363310300074) rotate(0 113.93823651518835 112.37686363713703)"><path d="M0 0 C31.11 3.75, 148.69 -15.23, 186.67 22.47 C224.65 60.18, 221.01 192.29, 227.88 226.25 M0 0 C31.11 3.75, 148.69 -15.23, 186.67 22.47 C224.65 60.18, 221.01 192.29, 227.88 226.25" stroke="#495057" stroke-width="4" fill="none"/></g><g transform="translate(497.62112124841565 129.9363310300074) rotate(0 113.93823651518835 112.37686363713703)"><path d="M215.09 199.12 C219.98 209.51, 224.88 219.9, 227.88 226.25 M215.09 199.12 C219.76 209.03, 224.43 218.94, 227.88 226.25" stroke="#495057" stroke-width="4" fill="none"/></g><g transform="translate(497.62112124841565 129.9363310300074) rotate(0 113.93823651518835 112.37686363713703)"><path d="M235.52 197.24 C232.59 208.35, 229.67 219.46, 227.88 226.25 M235.52 197.24 C232.73 207.84, 229.94 218.43, 227.88 226.25" stroke="#495057" stroke-width="4" fill="none"/></g></g><g stroke-linecap="round"><g transform="translate(1231.8116105055533 167.75294042182014) rotate(0 4.531702905868542 98.66239128618402)"><path d="M0 0 C1.51 32.89, 7.55 164.44, 9.06 197.32 M0 0 C1.51 32.89, 7.55 164.44, 9.06 197.32" stroke="#495057" stroke-width="4" fill="none"/></g><g transform="translate(1231.8116105055533 167.75294042182014) rotate(0 4.531702905868542 98.66239128618402)"><path d="M-2.48 169.63 C1.41 178.96, 5.3 188.29, 9.06 197.32 M-2.48 169.63 C1.37 178.86, 5.22 188.09, 9.06 197.32" stroke="#495057" stroke-width="4" fill="none"/></g><g transform="translate(1231.8116105055533 167.75294042182014) rotate(0 4.531702905868542 98.66239128618402)"><path d="M18.02 168.69 C15 178.34, 11.99 187.98, 9.06 197.32 M18.02 168.69 C15.03 178.24, 12.05 187.78, 9.06 197.32" stroke="#495057" stroke-width="4" fill="none"/></g></g><g transform="translate(733.9912799835158 667.0306758140727) rotate(0 269.57594920159136 39.77350070187413)"><text x="269.57594920159136" y="55.54700140374824" font-family="Virgil, Segoe UI Emoji" font-size="63.63760112299862px" fill="#495057" text-anchor="middle" style="white-space: pre;" direction="ltr">Insert the string</text></g><g transform="translate(179.3752734883035 10) rotate(0 150.74262093288144 64.40177701827326)"><text x="150.74262093288144" y="45.40177701827328" font-family="Virgil, Segoe UI Emoji" font-size="50.95525214632612px" fill="#495057" text-anchor="middle" style="white-space: pre;" direction="ltr">Change the </text><text x="150.74262093288144" y="109.80355403654656" font-family="Virgil, Segoe UI Emoji" font-size="50.95525214632612px" fill="#495057" text-anchor="middle" style="white-space: pre;" direction="ltr">type</text></g><g transform="translate(1041.0988378457173 27.853274030048397) rotate(0 152.5 68)"><text x="152.5" y="48" font-family="Virgil, Segoe UI Emoji" font-size="53.85978943680078px" fill="#495057" text-anchor="middle" style="white-space: pre;" direction="ltr">Modify the </text><text x="152.5" y="116" font-family="Virgil, Segoe UI Emoji" font-size="53.85978943680078px" fill="#495057" text-anchor="middle" style="white-space: pre;" direction="ltr">formatting</text></g></svg>

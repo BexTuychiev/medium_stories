@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2022/5_may/',
+jtm.publish('2022/6_june/1_spacy_beginner_tutorial/notebook.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title="",

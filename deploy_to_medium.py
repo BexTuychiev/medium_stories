@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2022/5_may/5_top_10_libs_for_rusers/notebook.ipynb',
+jtm.publish('2022/',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title="",

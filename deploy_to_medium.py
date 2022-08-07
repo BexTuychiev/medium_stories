@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2022/7_july/',
+jtm.publish('2022/8_august/1_tds_issue_5/',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title="",

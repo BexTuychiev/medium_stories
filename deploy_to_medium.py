@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2022/7_july/',
+jtm.publish('2022/10_october/1_intro_to_julia/notebook.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title="",

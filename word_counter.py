@@ -21,7 +21,6 @@ def word_count(notebook_path):
 
 
 if __name__ == '__main__':
-    import os
     import sys
 
     print(word_count(sys.argv[1]))

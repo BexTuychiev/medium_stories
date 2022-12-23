@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2022/12_december/2_dvc_vscode/notebook.ipynb',
+jtm.publish('2022/12_december/3_bentoml_vs_fastapi/notebook.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title="",

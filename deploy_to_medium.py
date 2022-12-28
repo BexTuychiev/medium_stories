@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2022/12_december/2_dvc_vscode/exp_tracking.ipynb',
+jtm.publish('2022/12_december/2_dvc_vscode/notebook.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title="",

@@ -6,5 +6,5 @@ pandas
 scikit_learn
 seaborn
 shap
-plotly~=5.3.1
-requests~=2.26.0
+plotly
+requests

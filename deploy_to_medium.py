@@ -1,7 +1,7 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2023/1_january/',
+jtm.publish('2023/1_january/3_synthetic_data_generators/notebook.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
             title="",

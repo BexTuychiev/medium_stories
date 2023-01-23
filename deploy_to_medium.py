@@ -1,10 +1,10 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2023/1_january/',
+jtm.publish('2023/1_january/4_julia_vs_python/notebook.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title="",
+            title="5 Excellent Julia Features That Python Developers Can Only Wish They Had",
             tags=None,
             publish_status='draft',
             notify_followers=False,

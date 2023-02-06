@@ -17,3 +17,9 @@ train_oct.csv
 *.parquet
 raw
 prepared
+raw
+prepared
+data
+models
+images
+*.Identifier

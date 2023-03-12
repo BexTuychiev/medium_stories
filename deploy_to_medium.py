@@ -1,10 +1,10 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2023/2_february/7_fractal_art/notebook.ipynb',
+jtm.publish('2023/3_march/2_impostor_syndrome/notebook.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title="Create Stunning Fractal Art with Python: A Tutorial For Beginners And Hardcore Math Lovers",
+            title="How to Crush the Impostor Syndrome as an (Aspiring) Data Scientist Forever",
             tags=None,
             publish_status='draft',
             notify_followers=False,

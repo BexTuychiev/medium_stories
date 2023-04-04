@@ -1,10 +1,10 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2023/4_april/1_pathlib/notebook.ipynb',
+jtm.publish('2023/4_april//notebook.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title="Goodbye os.path: 15 Pathlib Tricks to Quickly Master The File System in Python",
+            title="",
             tags=None,
             publish_status='draft',
             notify_followers=False,

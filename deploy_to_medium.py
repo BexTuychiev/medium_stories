@@ -1,10 +1,10 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2023/5_may//notebook.ipynb',
+jtm.publish('2023/5_may/2_github_concepts/notebook.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title="",
+            title="GitHub For The Modern Data Scientist: 7 Concepts You Can't .gitignore",
             tags=None,
             publish_status='draft',
             notify_followers=False,

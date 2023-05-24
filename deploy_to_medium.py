@@ -1,10 +1,10 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2023/5_may/4_dvc_concepts/notebook.ipynb',
+jtm.publish('2023/5_may//notebook.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title="Data Version Control For the Modern Data Scientist: 7 DVC Concepts You Can't Ignore",
+            title="",
             tags=None,
             publish_status='draft',
             notify_followers=False,

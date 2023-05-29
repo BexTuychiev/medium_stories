@@ -1,10 +1,10 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2023/5_may/5_sklearn_pipelines/notebook.ipynb',
+jtm.publish('2023/5_may//notebook.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title="Sklearn Pipelines for the Modern ML Engineer: 9 Techniques You Can't Ignore",
+            title="",
             tags=None,
             publish_status='draft',
             notify_followers=False,

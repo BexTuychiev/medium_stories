@@ -1,10 +1,10 @@
 import jupyter_to_medium as jtm
 import os
 
-jtm.publish('2023/6_june/1_docker_concepts/notebook.ipynb',
+jtm.publish('2023/6_june//notebook.ipynb',
             integration_token=os.environ['TOKEN'],
             pub_name=None,
-            title="Docker For the Modern Data Scientists: 6 Concepts You Can't Ignore in 2023",
+            title="",
             tags=None,
             publish_status='draft',
             notify_followers=False,

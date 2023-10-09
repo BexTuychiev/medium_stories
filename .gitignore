@@ -21,3 +21,4 @@ data
 models
 images
 *.Identifier
+config.toml

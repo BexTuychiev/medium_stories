@@ -1,8 +1,12 @@
 import jupyter_to_medium as jtm
 import os
+import toml
 
-jtm.publish('2023///notebook.ipynb',
-            integration_token=os.environ['TOKEN'],
+with open('config.toml', 'r') as file:
+    data = toml.load(file)
+
+jtm.publish('2023/10_october//notebook.ipynb',
+            integration_token=data['codes']['TOKEN'],
             pub_name=None,
             title="",
             tags=None,

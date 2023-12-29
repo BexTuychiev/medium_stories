@@ -5,7 +5,7 @@ import toml
 with open('config.toml', 'r') as file:
     data = toml.load(file)
 
-jtm.publish('2023/12_december/2_antigranular/notebook.ipynb',
+jtm.publish('2023/12_december//notebook.ipynb',
             integration_token=data['codes']['TOKEN'],
             pub_name=None,
             title="",

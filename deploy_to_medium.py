@@ -5,10 +5,10 @@ import toml
 with open('config.toml', 'r') as file:
     data = toml.load(file)
 
-jtm.publish('2024/1_january//notebook.ipynb',
+jtm.publish('2024/1_january/4_intro_to_nannyml/notebook.ipynb',
             integration_token=data['codes']['TOKEN'],
             pub_name=None,
-            title="",
+            title="An end-to-end ML Model Monitoring Workflow with NannyML in Python",
             tags=None,
             publish_status='draft',
             notify_followers=False,

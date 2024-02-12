@@ -5,10 +5,10 @@ import toml
 with open('config.toml', 'r') as file:
     data = toml.load(file)
 
-jtm.publish('2024/2_february/2_xgen/notebook.ipynb',
+jtm.publish('2024/2_february/1_langsmith/notebook.ipynb',
             integration_token=data['codes']['TOKEN'],
             pub_name=None,
-            title="Salesforce XGen-7B: A Step-by-step tutorial on Using And Fine-Tuning XGen-7B",
+            title="An Introduction to Debugging And Testing LLMs in LangSmith",
             tags=None,
             publish_status='draft',
             notify_followers=False,

@@ -5,10 +5,10 @@ import toml
 with open('config.toml', 'r') as file:
     data = toml.load(file)
 
-jtm.publish('2024/2_february//notebook.ipynb',
+jtm.publish('2024/2_february/4_dataclasses/notebook.ipynb',
             integration_token=data['codes']['TOKEN'],
             pub_name=None,
-            title="",
+            title="Learn Data Classes in Python: Comprehensive Tutorial",
             tags=None,
             publish_status='draft',
             notify_followers=False,

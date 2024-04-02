@@ -5,10 +5,10 @@ import toml
 with open('config.toml', 'r') as file:
     data = toml.load(file)
 
-jtm.publish('2024/3_march/3_snowflake_time_travel/notebook.ipynb',
+jtm.publish('2024/4_april//notebook.ipynb',
             integration_token=data['codes']['TOKEN'],
             pub_name=None,
-            title="Comprehensive Guide on Using Time Travel Feature in Snowflake",
+            title="",
             tags=None,
             publish_status='draft',
             notify_followers=False,

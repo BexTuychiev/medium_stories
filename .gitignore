@@ -23,3 +23,5 @@ images
 *.Identifier
 config.toml
 .env
+config.py
+

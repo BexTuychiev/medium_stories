@@ -5,10 +5,10 @@ import toml
 with open('config.toml', 'r') as file:
     data = toml.load(file)
 
-jtm.publish('2024/4_april//notebook.ipynb',
+jtm.publish('2024/4_april/4_env_variables/notebook.ipynb',
             integration_token=data['codes']['TOKEN'],
             pub_name=None,
-            title="",
+            title="Everything You Need to Know About Python Environment Variables",
             tags=None,
             publish_status='draft',
             notify_followers=False,

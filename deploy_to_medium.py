@@ -5,10 +5,10 @@ import toml
 with open('config.toml', 'r') as file:
     data = toml.load(file)
 
-jtm.publish('2024/4_april/5_encapsulation/notebook.ipynb',
+jtm.publish('2024/4_april//notebook.ipynb',
             integration_token=data['codes']['TOKEN'],
             pub_name=None,
-            title="Comprehensive Tutorial on Encapsulation in Python Object-oriented Programming",
+            title="",
             tags=None,
             publish_status='draft',
             notify_followers=False,

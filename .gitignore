@@ -25,3 +25,4 @@ config.toml
 .env
 config.py
 
+.env*

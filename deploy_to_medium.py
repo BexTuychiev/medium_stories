@@ -5,10 +5,10 @@ import toml
 with open('config.toml', 'r') as file:
     data = toml.load(file)
 
-jtm.publish('2024/4_april//notebook.ipynb',
+jtm.publish('2024/5_may/1_dijkstra/notebook.ipynb',
             integration_token=data['codes']['TOKEN'],
             pub_name=None,
-            title="",
+            title="Dijkstra",
             tags=None,
             publish_status='draft',
             notify_followers=False,

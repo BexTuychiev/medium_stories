@@ -1,0 +1,15 @@
+# Microsoft's new data center
+
+Microsoft will construct a $3B AI data center in Racine, Wisconsin, company president Brad Smith announced yesterday. It's the latest billion-dollar investment in AI infrastructure as tech companies look to keep up with surging demand.     
+
+The project is expected to create 2,000 permanent jobs at the center, in addition to 2,300 construction gigs. The data center will add to the roughly 2,500 such structures across the US responsible for computing, storing, and processing the nation's data (see map). Microsoft is a major stakeholder in ChatGPT-creator OpenAI, whose technology requires enormous energy sources to train and deploy. Analysts expect data centers will account for roughly 6% of all annual US electricity use by 2026, up from 4% last year.      
+
+The plant is located near the site of a since-stalled project tech manufacturer Foxconn announced in 2017 to construct a $10B liquid crystal plant.
+
+# FTX Recovers Funds
+
+FTX said this week it has recovered enough funds to repay defrauded investors in full and provide the vast majority with interest. The failed cryptocurrency exchange platform filed its proposal late Tuesday to a federal bankruptcy court for approval.
+
+Since FTX collapsed in 2022, CEO John Ray III (see previous write-up) has worked to track down more than $8B in missing assets to repay an estimated $11.2B owed to creditors. This week, Ray said the company has recovered between $14.5B and $16.3B, with much of the funds tied to government-seized FTX properties or recovered from investments FTX and its sister company made in hedge funds, digital assets, and AI startup Anthropic. FTX is also working to recoup payouts made to former company executives and the parents of its convicted founder, Sam Bankman-Fried.
+
+If the proposal is approved, 98% of customers—those who invested $50K or less—will receive 118% of their investment. A hearing on assets dispersal is planned for June 25.

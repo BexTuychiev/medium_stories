@@ -5,7 +5,7 @@ import toml
 with open('config.toml', 'r') as file:
     data = toml.load(file)
 
-jtm.publish('2024/5_may/2_misrtal_x22b/notebook.ipynb',
+jtm.publish('2024/5_may//notebook.ipynb',
             integration_token=data['codes']['TOKEN'],
             pub_name=None,
             title="",

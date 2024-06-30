@@ -65,17 +65,29 @@ def predict_price(carat, cut, color, clarity, depth, table, x, y, z):
 iface = gr.Interface(
     fn=predict_price,
     inputs=[
-        gr.Number(label="Carat"),
+        gr.Slider(
+            minimum=diamonds["carat"].min(),
+            maximum=diamonds["carat"].max(),
+            label="Carat",
+        ),
         gr.Dropdown(["Fair", "Good", "Very Good", "Premium", "Ideal"], label="Cut"),
         gr.Dropdown(["D", "E", "F", "G", "H", "I", "J"], label="Color"),
         gr.Dropdown(
             ["I1", "SI2", "SI1", "VS2", "VS1", "VVS2", "VVS1", "IF"], label="Clarity"
         ),
-        gr.Number(label="Depth"),
-        gr.Number(label="Table"),
-        gr.Number(label="X"),
-        gr.Number(label="Y"),
-        gr.Number(label="Z"),
+        gr.Slider(
+            minimum=diamonds["depth"].min(),
+            maximum=diamonds["depth"].max(),
+            label="Depth",
+        ),
+        gr.Slider(
+            minimum=diamonds["table"].min(),
+            maximum=diamonds["table"].max(),
+            label="Table",
+        ),
+        gr.Slider(minimum=diamonds["x"].min(), maximum=diamonds["x"].max(), label="X"),
+        gr.Slider(minimum=diamonds["y"].min(), maximum=diamonds["y"].max(), label="Y"),
+        gr.Slider(minimum=diamonds["z"].min(), maximum=diamonds["z"].max(), label="Z"),
     ],
     outputs="text",
     title="Diamond Price Predictor",

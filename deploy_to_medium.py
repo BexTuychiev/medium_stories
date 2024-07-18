@@ -9,7 +9,7 @@ jtm.publish(
     "2024/7_july/4_sgd/notebook.ipynb",
     integration_token=data["codes"]["TOKEN"],
     pub_name=None,
-    title="",
+    title="SGD Explained",
     tags=None,
     publish_status="draft",
     notify_followers=False,

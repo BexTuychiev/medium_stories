@@ -14,17 +14,15 @@ from concept_drift import detect_concept_drift
 
 app = Flask(__name__)
 
-# Load the model and scaler
+# Load the model pipeline
 try:
-    model = joblib.load("../model.joblib")
-    scaler = joblib.load("../scaler.joblib")
-    print("Model and scaler loaded successfully")
+    model_pipeline = joblib.load("../model_pipeline.joblib")
+    print("Model pipeline loaded successfully")
 except Exception as e:
-    print(f"Error loading model or scaler: {e}")
+    print(f"Error loading model pipeline: {e}")
     print(f"Current working directory: {os.getcwd()}")
     print(f"Files in current directory: {os.listdir('.')}")
-    model = None
-    scaler = None
+    model_pipeline = None
 
 # Create Prometheus metrics
 data_drift_gauge = Gauge("data_drift", "Data Drift Score")
@@ -33,20 +31,18 @@ concept_drift_gauge = Gauge("concept_drift", "Concept Drift Score")
 # Load reference data
 diamonds = sns.load_dataset("diamonds")
 X_reference = diamonds[["carat", "cut", "color", "clarity", "depth", "table"]]
-X_reference = pd.get_dummies(X_reference, columns=["cut", "color", "clarity"])
 y_reference = diamonds["price"]
 
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    if model is None or scaler is None:
-        return jsonify({"error": "Model or scaler not loaded properly"}), 500
+    if model_pipeline is None:
+        return jsonify({"error": "Model pipeline not loaded properly"}), 500
 
     data = request.json
     df = pd.DataFrame(data, index=[0])
-    df_encoded = pd.get_dummies(df, columns=["cut", "color", "clarity"])
-    df_scaled = scaler.transform(df_encoded)
-    prediction = model.predict(df_scaled)
+
+    prediction = model_pipeline.predict(df)
     return jsonify({"prediction": prediction[0]})
 
 
@@ -54,7 +50,6 @@ def monitor_drifts():
     # Simulating new data (in a real scenario, this would be actual new data)
     new_diamonds = sns.load_dataset("diamonds").sample(n=1000, replace=True)
     X_current = new_diamonds[["carat", "cut", "color", "clarity", "depth", "table"]]
-    X_current = pd.get_dummies(X_current, columns=["cut", "color", "clarity"])
     y_current = new_diamonds["price"]
 
     # Data drift detection
@@ -63,10 +58,10 @@ def monitor_drifts():
 
     # Concept drift detection
     is_concept_drift, concept_drift_score = detect_concept_drift(
-        model,
-        scaler.transform(X_reference),
+        model_pipeline,
+        X_reference,
         y_reference,
-        scaler.transform(X_current),
+        X_current,
         y_current,
     )
     concept_drift_gauge.set(concept_drift_score)

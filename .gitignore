@@ -26,3 +26,6 @@ config.toml
 config.py
 
 .env*
+__pycache__/
+*.pyc
+*.pyo

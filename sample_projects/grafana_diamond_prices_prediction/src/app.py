@@ -1,0 +1,92 @@
+# src/app.py
+from flask import Flask, request, jsonify
+import joblib
+import pandas as pd
+from prometheus_client import start_http_server, Gauge
+from apscheduler.schedulers.background import BackgroundScheduler
+import seaborn as sns
+import os
+from prometheus_client import make_wsgi_app
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
+
+from data_drift import detect_data_drift
+from concept_drift import detect_concept_drift
+
+app = Flask(__name__)
+
+# Load the model and scaler
+try:
+    model = joblib.load("../model.joblib")
+    scaler = joblib.load("../scaler.joblib")
+    print("Model and scaler loaded successfully")
+except Exception as e:
+    print(f"Error loading model or scaler: {e}")
+    print(f"Current working directory: {os.getcwd()}")
+    print(f"Files in current directory: {os.listdir('.')}")
+    model = None
+    scaler = None
+
+# Create Prometheus metrics
+data_drift_gauge = Gauge("data_drift", "Data Drift Score")
+concept_drift_gauge = Gauge("concept_drift", "Concept Drift Score")
+
+# Load reference data
+diamonds = sns.load_dataset("diamonds")
+X_reference = diamonds[["carat", "cut", "color", "clarity", "depth", "table"]]
+X_reference = pd.get_dummies(X_reference, columns=["cut", "color", "clarity"])
+y_reference = diamonds["price"]
+
+
+@app.route("/predict", methods=["POST"])
+def predict():
+    if model is None or scaler is None:
+        return jsonify({"error": "Model or scaler not loaded properly"}), 500
+
+    data = request.json
+    df = pd.DataFrame(data, index=[0])
+    df_encoded = pd.get_dummies(df, columns=["cut", "color", "clarity"])
+    df_scaled = scaler.transform(df_encoded)
+    prediction = model.predict(df_scaled)
+    return jsonify({"prediction": prediction[0]})
+
+
+def monitor_drifts():
+    # Simulating new data (in a real scenario, this would be actual new data)
+    new_diamonds = sns.load_dataset("diamonds").sample(n=1000, replace=True)
+    X_current = new_diamonds[["carat", "cut", "color", "clarity", "depth", "table"]]
+    X_current = pd.get_dummies(X_current, columns=["cut", "color", "clarity"])
+    y_current = new_diamonds["price"]
+
+    # Data drift detection
+    is_data_drift, _, data_drift_score = detect_data_drift(X_reference, X_current)
+    data_drift_gauge.set(data_drift_score)
+
+    # Concept drift detection
+    is_concept_drift, concept_drift_score = detect_concept_drift(
+        model,
+        scaler.transform(X_reference),
+        y_reference,
+        scaler.transform(X_current),
+        y_current,
+    )
+    concept_drift_gauge.set(concept_drift_score)
+
+    if is_data_drift:
+        print("Data drift detected!")
+    if is_concept_drift:
+        print("Concept drift detected!")
+
+
+app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {"/metrics": make_wsgi_app()})
+
+if __name__ == "__main__":
+    # Start Prometheus metrics server
+    start_http_server(8000)
+
+    # Schedule drift monitoring
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(monitor_drifts, "interval", minutes=1)
+    scheduler.start()
+
+    # Run Flask app
+    app.run(host="0.0.0.0", port=5000)

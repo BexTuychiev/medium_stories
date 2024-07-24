@@ -1,0 +1,9 @@
+scikit-learn
+numpy
+pandas
+seaborn
+flask
+apscheduler
+prometheus-client
+joblib
+werkzeug

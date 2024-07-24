@@ -1,0 +1,28 @@
+version: "3"
+services:
+  app:
+    build: .
+    ports:
+      - "5000:5000" # Flask app
+      - "8000:8000" # Prometheus metrics
+    volumes:
+      - ./:/app
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
+volumes:
+  grafana-storage:

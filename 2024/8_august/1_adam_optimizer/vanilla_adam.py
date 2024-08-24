@@ -137,17 +137,3 @@ y_true_denormalized = test_xy[:, 1] * std[1] + mean[1]
 actual_mse = np.mean((y_true_denormalized - y_preds_denormalized) ** 2)
 
 print(f"Actual RMSE: {actual_mse**0.5}")
-
-# Plot the results
-plt.figure(figsize=(10, 6))
-plt.scatter(
-    test_xy[:, 0] * std[0] + mean[0], y_true_denormalized, alpha=0.5, label="Actual"
-)
-plt.scatter(
-    test_xy[:, 0] * std[0] + mean[0], y_preds_denormalized, alpha=0.5, label="Predicted"
-)
-plt.xlabel("Carat")
-plt.ylabel("Price")
-plt.legend()
-plt.title("Actual vs Predicted Diamond Prices (ADAM)")
-plt.show()

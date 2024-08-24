@@ -6,7 +6,7 @@ with open("config.toml", "r") as file:
     data = toml.load(file)
 
 jtm.publish(
-    "2024/8_august//notebook.ipynb",
+    "2024/8_august/1_adam_optimizer/notebook.ipynb",
     integration_token=data["codes"]["TOKEN"],
     pub_name=None,
     title="",
@@ -19,5 +19,3 @@ jtm.publish(
     save_markdown=False,
     table_conversion="matplotlib",
 )
-
-

@@ -56,6 +56,6 @@ def split_documents(documents):
 
 # Test the function
 if __name__ == "__main__":
-    source = "/home/bexgboost/articles/sample_projects/rag_chatbot_streamlit/src/sample_image.png"  # Change this to test different files
+    source = "/path/to/sample/image.png"  # Change this to test different images or PDFs
     chunks = process_document(source)
     print(f"Number of chunks: {len(chunks)}")

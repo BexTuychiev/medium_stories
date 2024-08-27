@@ -6,10 +6,10 @@ with open("config.toml", "r") as file:
     data = toml.load(file)
 
 jtm.publish(
-    "2024/8_august/1_adam_optimizer/notebook.ipynb",
+    "2024/8_august/2_rag_langchain/notebook.ipynb",
     integration_token=data["codes"]["TOKEN"],
     pub_name=None,
-    title="",
+    title="Building a RAG system with LangChain",
     tags=None,
     publish_status="draft",
     notify_followers=False,

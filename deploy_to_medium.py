@@ -5,7 +5,7 @@ with open("config.toml", "r") as file:
     data = toml.load(file)
 
 jtm.publish(
-    "2024/8_august//notebook.ipynb",
+    "2024/8_august/4_sarsa/notebook.ipynb",
     integration_token=data["codes"]["TOKEN"],
     pub_name=None,
     title="",

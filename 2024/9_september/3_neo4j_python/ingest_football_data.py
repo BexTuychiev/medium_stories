@@ -106,13 +106,13 @@ def ingest_goals(session, df):
     MATCH (m:Match {id: row.id})
     MERGE (p:Player {name: row.scorer})
     MERGE (t:Team {name: row.team})
-    MERGE (p)-[s:SCORED_FOR]->(t)
+    CREATE (p)-[s:SCORED_FOR]->(t)
     SET s.own_goal = row.own_goal,
         s.penalty = row.penalty
     FOREACH(_ IN CASE WHEN row.minute IS NOT NULL THEN [1] ELSE [] END |
         SET s.minute = row.minute
     )
-    MERGE (p)-[r:SCORED_IN]->(m)
+    CREATE (p)-[r:SCORED_IN]->(m)
     SET r.own_goal = row.own_goal,
         r.penalty = row.penalty
     FOREACH(_ IN CASE WHEN row.minute IS NOT NULL THEN [1] ELSE [] END |

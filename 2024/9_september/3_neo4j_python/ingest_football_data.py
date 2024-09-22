@@ -112,7 +112,12 @@ def ingest_goals(session, df):
     FOREACH(_ IN CASE WHEN row.minute IS NOT NULL THEN [1] ELSE [] END |
         SET s.minute = row.minute
     )
-    MERGE (p)-[:SCORED_IN]->(m)
+    MERGE (p)-[r:SCORED_IN]->(m)
+    SET r.own_goal = row.own_goal,
+        r.penalty = row.penalty
+    FOREACH(_ IN CASE WHEN row.minute IS NOT NULL THEN [1] ELSE [] END |
+        SET r.minute = row.minute
+    )
     """
     for i in tqdm(range(0, len(df), BATCH_SIZE), desc="Ingesting goals"):
         batch = df.iloc[i : i + BATCH_SIZE]

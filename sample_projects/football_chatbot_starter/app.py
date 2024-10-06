@@ -28,7 +28,7 @@ def init_resources(api_key):
     graph.refresh_schema()
 
     chain = GraphCypherQAChain.from_llm(
-        ChatOpenAI(api_key=api_key, model="gpt-4", temperature=0),
+        ChatOpenAI(api_key=api_key, model="gpt-4o"),
         graph=graph,
         verbose=True,
         show_intermediate_steps=True,
@@ -44,7 +44,6 @@ if openai_api_key:
         st.success("Resources initialized successfully!", icon="🚀")
 
 
-@st.cache_data(ttl=3600, show_spinner=False)  # Cache for 1 hour
 def query_graph(query):
     try:
         result = chain.invoke({"query": query})["result"]
@@ -67,6 +66,16 @@ if "messages" not in st.session_state:
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
+
+
+def query_graph(query):
+    try:
+        result = chain.invoke({"query": query})["result"]
+        return result
+    except Exception as e:
+        st.error(f"An error occurred: {str(e)}")
+        return "I'm sorry, I encountered an error while processing your request."
+
 
 # Accept user input
 if prompt := st.chat_input("Your question..."):

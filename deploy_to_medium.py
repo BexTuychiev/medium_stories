@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 jtm.publish(
-    "",
+    "2024/11_november/2_python_poetry/notebook.ipynb",
     integration_token=os.getenv("MEDIUM_INTEGRATION_TOKEN"),
     pub_name=None,
     title="",

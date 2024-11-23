@@ -1,12 +1,13 @@
+import os
 import jupyter_to_medium as jtm
-import toml
 
-with open("config.toml", "r") as file:
-    data = toml.load(file)
+from dotenv import load_dotenv
+
+load_dotenv()
 
 jtm.publish(
-    "2024/11_november/3_learning_pytorch/notebook.ipynb",
-    integration_token=data["codes"]["TOKEN"],
+    "",
+    integration_token=os.getenv("MEDIUM_INTEGRATION_TOKEN"),
     pub_name=None,
     title="",
     tags=None,
